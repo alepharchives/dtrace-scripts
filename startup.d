@@ -21,19 +21,33 @@ pid$target::fork:entry
 pid$target::fork:return
 {
   printf("fork returned in process %d\n", pid);
-  ustack();
+}
+
+pid$target::dlopen:entry,
+pid$target::NSAddImage:entry
+{
+  self->lib = copyinstr(arg0);
+}
+
+pid$target::NSLinkModule:entry
+{
+  self->lib = copyinstr(arg1);
 }
 
 pid$target::ImageLoader??runInitializers*:entry
+/self->lib != 0/
 {
-  ustack();
   self->ts = timestamp;
 }
 
 pid$target::ImageLoader??runInitializers*:return 
-/self->ts/
+/self->ts && self->lib != 0/
 {
-  init = init + (timestamp - self->ts);
+  this->delta = timestamp - self->ts;
+  init = init + this->delta;
+  @int[self->lib] = sum(this->delta / 1000000000);
+  @frac[self->lib] = sum(this->delta % 1000000000);
+  self->lib = 0;
   self->ts = 0;
 }
 
@@ -53,6 +67,7 @@ dtrace:::END
   this->total = t - start1;
   this->startup = t - start2;
   this->init = start2 - start1;
+  printa("Static init: %@u.%@03us for %s\n", @int, @frac);
   printf("Static initialization: %u.%03us\n", init / 1000000000, init % 1000000000);
   printf("Initialization: %u.%03us\n", this->init / 1000000000, this->init % 1000000000);
   printf("Startup       : %u.%03us\n", this->startup / 1000000000, this->startup % 1000000000);
