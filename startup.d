@@ -4,6 +4,7 @@ dtrace:::BEGIN
 {
   start1 = timestamp;
   start2 = 0;
+  init = 0;
   printf("starting in process %d\n", pid);
 }
 
@@ -23,6 +24,19 @@ pid$target::fork:return
   ustack();
 }
 
+pid$target::ImageLoader??runInitializers*:entry
+{
+  ustack();
+  self->ts = timestamp;
+}
+
+pid$target::ImageLoader??runInitializers*:return 
+/self->ts/
+{
+  init = init + (timestamp - self->ts);
+  self->ts = 0;
+}
+
 /* Stop tracing when BrowserStartup() returns. */
 
 javascript*:::function-return
@@ -39,6 +53,7 @@ dtrace:::END
   this->total = t - start1;
   this->startup = t - start2;
   this->init = start2 - start1;
+  printf("Static initialization: %u.%03us\n", init / 1000000000, init % 1000000000);
   printf("Initialization: %u.%03us\n", this->init / 1000000000, this->init % 1000000000);
   printf("Startup       : %u.%03us\n", this->startup / 1000000000, this->startup % 1000000000);
   printf("---------------\n");
