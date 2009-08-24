@@ -13,16 +13,6 @@ pid$target:XUL:XRE_main:entry
   start2 = timestamp;
 }
 
-pid$target::fork:entry
-{
-  printf("fork in process %d\n", pid);
-}
-
-pid$target::fork:return
-{
-  printf("fork returned in process %d\n", pid);
-}
-
 pid$target::dlopen:entry,
 pid$target::NSAddImage:entry
 {
