@@ -1,2 +1,4 @@
 *.app
 *.log
+*.log.*
+junk
