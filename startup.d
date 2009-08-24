@@ -37,13 +37,13 @@ pid$target::NSLinkModule:entry
 pid$target::ImageLoader??runInitializers*:entry
 /self->lib != 0/
 {
-  self->ts = timestamp;
+  self->ts = vtimestamp;
 }
 
 pid$target::ImageLoader??runInitializers*:return 
 /self->ts && self->lib != 0/
 {
-  this->delta = timestamp - self->ts;
+  this->delta = vtimestamp - self->ts;
   init = init + this->delta;
   @int[self->lib] = sum(this->delta / 1000000000);
   @frac[self->lib] = sum(this->delta % 1000000000);
