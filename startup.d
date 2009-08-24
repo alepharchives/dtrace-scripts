@@ -44,7 +44,9 @@ pid$target::ImageLoader??runInitializers*:return
 /self->ts && self->lib != 0/
 {
   this->delta = vtimestamp - self->ts;
-  init = init + this->delta;
+  @initint = sum(this->delta / 1000000000);
+  @initfrac = sum(this->delta % 1000000000);
+  printa("---> %@u.%@03us\n", @initint, @initfrac);
   @int[self->lib] = sum(this->delta / 1000000000);
   @frac[self->lib] = sum(this->delta % 1000000000);
   self->lib = 0;
@@ -68,7 +70,7 @@ dtrace:::END
   this->startup = t - start2;
   this->init = start2 - start1;
   printa("Static init: %@u.%@03us for %s\n", @int, @frac);
-  printf("Static initialization: %u.%03us\n", init / 1000000000, init % 1000000000);
+  printa("Static initialization: %@u.%@03us\n", @initint, @initfrac);
   printf("Initialization: %u.%03us\n", this->init / 1000000000, this->init % 1000000000);
   printf("Startup       : %u.%03us\n", this->startup / 1000000000, this->startup % 1000000000);
   printf("---------------\n");
