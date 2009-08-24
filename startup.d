@@ -16,12 +16,12 @@ pid$target:XUL:XRE_main:entry
 pid$target::dlopen:entry,
 pid$target::NSAddImage:entry
 {
-  self->lib = copyinstr(arg0);
+  self->lib = arg0;
 }
 
 pid$target::NSLinkModule:entry
 {
-  self->lib = copyinstr(arg1);
+  self->lib = arg1;
 }
 
 pid$target::ImageLoader??runInitializers*:entry
@@ -33,11 +33,12 @@ pid$target::ImageLoader??runInitializers*:entry
 pid$target::ImageLoader??runInitializers*:return 
 /self->ts && self->lib != 0/
 {
+  this->lib = copyinstr(self->lib);
   this->delta = vtimestamp - self->ts;
   @initint = sum(this->delta / 1000000000);
   @initfrac = sum(this->delta % 1000000000);
-  @int[self->lib] = sum(this->delta / 1000000000);
-  @frac[self->lib] = sum(this->delta % 1000000000);
+  @int[this->lib] = sum(this->delta / 1000000000);
+  @frac[this->lib] = sum(this->delta % 1000000000);
   self->lib = 0;
   self->ts = 0;
 }
