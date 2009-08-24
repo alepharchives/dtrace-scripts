@@ -62,9 +62,9 @@ dtrace:::END
   printf("Static initialization:\n");
   printa("%@u.%@09us for %s\n", @int, @frac);
   printf("---------------\n");
-  printa("= %@u.%@03us\n\n", @initint, @initfrac);
-  printf("Initialization: %u.%03us\n", this->init / 1000000000, this->init % 1000000000);
-  printf("Startup       : %u.%03us\n", this->startup / 1000000000, this->startup % 1000000000);
+  printa("= %@u.%@09us\n\n", @initint, @initfrac);
+  printf("Initialization: %u.%09us\n", this->init / 1000000000, this->init % 1000000000);
+  printf("Startup       : %u.%09us\n", this->startup / 1000000000, this->startup % 1000000000);
   printf("---------------\n");
-  printf("= %u.%03us\n", this->total / 1000000000, this->total % 1000000000);
+  printf("= %u.%09us\n", this->total / 1000000000, this->total % 1000000000);
 }
