@@ -5,7 +5,6 @@ dtrace:::BEGIN
   start1 = timestamp;
   start2 = 0;
   init = 0;
-  printf("starting in process %d\n", pid);
 }
 
 pid$target:XUL:XRE_main:entry
@@ -48,13 +47,11 @@ pid$target::ImageLoader??runInitializers*:return
 javascript*:::function-return
 /copyinstr(arg2) == "BrowserStartup"/
 {
-  printf("probe %s firing in process %d\n", probename, pid);
   exit(0);
 }
 
 dtrace:::END
 {
-  printf("finishing in process %d\n", pid);
   t = timestamp;
   this->total = t - start1;
   this->startup = t - start2;
