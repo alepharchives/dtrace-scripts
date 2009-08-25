@@ -24,7 +24,7 @@ pid$target:::return
 
 /* stop tracing here */
 
-mozilla$target:::main__entry
+mozilla$target:::main-entry
 {
   exit(0);
 }
