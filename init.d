@@ -24,7 +24,7 @@ pid$target:::return
 
 /* stop tracing here */
 
-pid$target:XUL:XRE_main:entry
+mozilla$target:::main__entry
 {
   exit(0);
 }

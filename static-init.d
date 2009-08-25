@@ -42,10 +42,9 @@ pid$target::ImageLoader??runInitializers*:return
   self->ts = 0;
 }
 
-/* Stop tracing when BrowserStartup() returns. */
+/* stop tracing here */
 
-javascript*:::function-return
-/copyinstr(arg2) == "BrowserStartup"/
+mozilla$target:::main__entry
 {
   exit(0);
 }
