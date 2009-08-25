@@ -1,0 +1,45 @@
+From f65be85307b526533c8b4ad964b5ca66d42a222a Mon Sep 17 00:00:00 2001
+From: wagerlabs <joelr1@gmail.com>
+Date: Tue, 25 Aug 2009 21:43:23 +0100
+Subject: [PATCH 2/2] main__entry probe
+
+---
+ probes/mozilla-trace.d      |    1 +
+ toolkit/xre/nsAppRunner.cpp |    6 ++++++
+ 2 files changed, 7 insertions(+), 0 deletions(-)
+
+diff --git a/probes/mozilla-trace.d b/probes/mozilla-trace.d
+index bd36134..afb6eef 100644
+--- a/probes/mozilla-trace.d
++++ b/probes/mozilla-trace.d
+@@ -35,6 +35,7 @@
+  */
+ 
+ provider mozilla {
++	probe main__entry();
+   /* Probe definitions go here */
+ };
+ 
+diff --git a/toolkit/xre/nsAppRunner.cpp b/toolkit/xre/nsAppRunner.cpp
+index 476229f..03a0c93 100644
+--- a/toolkit/xre/nsAppRunner.cpp
++++ b/toolkit/xre/nsAppRunner.cpp
+@@ -2601,9 +2601,15 @@ PRBool nspr_use_zone_allocator = PR_FALSE;
+ typedef BOOL (WINAPI* SetProcessDEPPolicyFunc)(DWORD dwFlags);
+ #endif
+ 
++#include <sys/sdt.h>
++#include "mozilla-trace.h"
++
++extern void main__entry();
++
+ int
+ XRE_main(int argc, char* argv[], const nsXREAppData* aAppData)
+ {
++  DTRACE_PROBE(mozilla, main__entry);
+ #ifdef MOZ_SPLASHSCREEN
+   nsSplashScreen *splashScreen = nsnull;
+ #endif
+-- 
+1.6.4
+
