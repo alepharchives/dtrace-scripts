@@ -1,6 +1,6 @@
 #pragma D option quiet
 
-dtrace:::BEGIN
+BEGIN
 {
   start1 = timestamp;
   start2 = 0;
@@ -49,7 +49,7 @@ mozilla$target:::main-entry
   exit(0);
 }
 
-dtrace:::END
+END
 {
   t = timestamp;
   this->total = t - start1;
