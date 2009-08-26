@@ -69,6 +69,10 @@ io:::done
   @delta[this->rw, args[2]->fi_pathname] = sum(this->delta/1000);
   @dtime[this->rw, args[2]->fi_pathname] = sum(this->dtime/1000);
   @count[this->rw, args[2]->fi_pathname] = sum(args[0]->b_bcount);
+
+  @deltasum = sum(this->delta/1000);
+  @dtimesum = sum(this->dtime/1000);
+  @countsum = sum(args[0]->b_bcount);
   
   /* memory cleanup */
   start_time[this->dev, this->blk] = 0;
@@ -107,4 +111,6 @@ END
 {
   printf("%-10s %-10s %7s %1s %s\n", "DELTA", "DTIME", "SIZE", "D", "PATHNAME");
   printa("%@-10d %@-10d %@7d %1s %s\n", @delta, @dtime, @count);
+  printf("------------------------------\n");
+  printa("%@-10d %@-10d %@7d\n", @deltasum, @dtimesum, @countsum);
 }
