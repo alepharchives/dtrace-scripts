@@ -3,9 +3,10 @@
 #pragma D option quiet
 #pragma D option switchrate=10hz
 
-dtrace:::BEGIN 
+BEGIN 
 {
   last_event[""] = 0;
+  ticks = 0;
 }
 
 /* check event is being traced */
@@ -89,9 +90,15 @@ io:::done
  
 /* exit promptly */
 
-tick-10sec 
+tick-10sec
+/ticks == 1/
 { 
   exit(0);
+}
+
+tick-10sec
+{
+  ticks++;
 }
 
 /* print details */

@@ -8,7 +8,8 @@
 BEGIN 
 {
   last_event[""] = 0;
-
+  ticks = 0;
+  
   printf("%-10s %-10s %1s %7s %s\n",
     "DELTA", "DTIME", "D", "SIZE", "PATHNAME");
 }
@@ -94,8 +95,15 @@ io:::done
   pending[args[1]->dev_statname] = 0;
 }
 
-tick-10sec 
+/* exit promptly */
+
+tick-10sec
+/ticks == 1/
 { 
   exit(0);
 }
 
+tick-10sec
+{
+  ticks++;
+}
