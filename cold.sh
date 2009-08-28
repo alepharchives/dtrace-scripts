@@ -5,5 +5,5 @@ scripts=""
 
 for i in $*; do scripts="$scripts -s $i"; done
 
-sync && purge && dtrace -x dynvarsize=64m -x evaltime=exec -c "$cmd" -wZ $scripts
+sync && purge && dtrace -x dynvarsize=64m -x evaltime=exec -c "$cmd" -qwZ $scripts
 

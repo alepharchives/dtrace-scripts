@@ -1,6 +1,5 @@
 /* Based on iosnoop by Brendan Gregg */
 
-#pragma D option quiet
 #pragma D option switchrate=10hz
 
 BEGIN 

@@ -1,5 +1,3 @@
-#pragma D option quiet
-
 BEGIN
 {
   start1 = timestamp;
