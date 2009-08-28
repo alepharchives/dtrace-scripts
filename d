@@ -3,10 +3,11 @@
 progname=$1
 shift
 
-scripts="-s sigcont.d"
+scripts=""
 
 for i in $*; do scripts="$scripts -s $i"; done
 
+scripts="$scripts -s sigcont.d"
 opts="-Zqw -x dynvarsize=64m -x evaltime=exec"
 
 dtrace='
