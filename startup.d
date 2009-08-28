@@ -5,13 +5,6 @@ BEGIN
   start = timestamp;
 }
 
-/* stop tracing here */
-
-mozilla$target:::main-entry
-{
-  exit(0);
-}
-
 END
 {
   this->total = timestamp - start;
