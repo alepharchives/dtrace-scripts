@@ -42,13 +42,6 @@ pid$target::ImageLoader??runInitializers*:return
   self->ts = 0;
 }
 
-/* stop tracing here */
-
-mozilla$target:::main-entry
-{
-  exit(0);
-}
-
 END
 {
   t = timestamp;

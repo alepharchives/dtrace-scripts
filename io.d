@@ -94,16 +94,3 @@ io:::done
 {
   pending[args[1]->dev_statname] = 0;
 }
-
-/* exit promptly */
-
-tick-10sec
-/ticks == 1/
-{ 
-  exit(0);
-}
-
-tick-10sec
-{
-  ticks++;
-}

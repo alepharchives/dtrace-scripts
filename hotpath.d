@@ -6,13 +6,6 @@ profile-997
   @[ufunc(arg0)] = count();
 }
 
-/* stop tracing here */
-
-mozilla$target:::main-entry
-{
-  exit(0);
-}
-
 END
 {
   trunc(@, 25)

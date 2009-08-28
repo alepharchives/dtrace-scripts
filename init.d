@@ -22,13 +22,6 @@ pid$target:::return
   self->ts = 0;
 }
 
-/* stop tracing here */
-
-mozilla$target:::main-entry
-{
-  exit(0);
-}
-
 END
 {
   this->t = timestamp;
