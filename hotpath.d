@@ -1,3 +1,5 @@
+#pragma D option aggsortrev
+
 profile-997
 /pid == $target/
 {
