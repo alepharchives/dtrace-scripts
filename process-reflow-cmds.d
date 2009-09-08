@@ -1,14 +1,8 @@
-pid$target::PresShell??ProcessReflowCommands*:entry
+mozilla$target:::process-reflow-do-work
 {
-  self->flag = 1;
-}
-
-pid$target::PresShell??ProcessReflowCommands*:return
-/self->flag/
-{
+  printf("\nthread id: %x\n", tid); 
   @n = count();
   ustack();
-  self->flag = 0;
 }
 
 END
