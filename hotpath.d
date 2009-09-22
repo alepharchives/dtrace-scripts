@@ -8,5 +8,5 @@ profile-997
 
 END
 {
-  trunc(@, 25)
+  trunc(@, 30)
 }

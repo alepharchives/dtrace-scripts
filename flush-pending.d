@@ -8,6 +8,7 @@ pid$target::PresShell??FlushPendingNotifications*:entry
 {
   self->ts = timestamp;
   self->vts = vtimestamp;  
+  self->flush_type = arg1;
 }
 
 mozilla$target:::process-xul-reflow-return
@@ -22,8 +23,9 @@ pid$target::PresShell??FlushPendingNotifications*:return
   this->vts = vtimestamp - self->vts;
   
   printf("\n");
-  printf("elapsed: %u.%06ums\n", this->ts / 1000000, this->ts % 1000000);
-  printf("cpu    : %u.%06ums\n", this->vts / 1000000, this->vts % 1000000);
+  printf("flush type: %u\n", self->flush_type);
+  printf("elapsed   : %u.%06ums\n", this->ts / 1000000, this->ts % 1000000);
+  printf("cpu       : %u.%06ums\n", this->vts / 1000000, this->vts % 1000000);
 
   @tsint = sum(this->ts / 1000000);
   @tsfrac = sum(this->ts % 1000000);
