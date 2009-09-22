@@ -3,7 +3,7 @@
 progname=$1
 shift
 
-scripts=""
+scripts="-s start.d"
 
 for i in $*; do scripts="$scripts -s $i"; done
 
