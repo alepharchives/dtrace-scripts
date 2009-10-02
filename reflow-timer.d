@@ -1,5 +1,7 @@
 /* We want to keep the trace only if the reflow timer fired.
  * We log speculatively and discard output if the timer is cancelled.
+ *
+ * Usage: dtrace -x specsize=128m -x bufresize=auto -s reflow-timer.d -p 15030 > /tmp/reflow.log 2>&1
  */
  
 mozilla$target:::reflow-timer-init
