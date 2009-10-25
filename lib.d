@@ -27,6 +27,14 @@ pid$target::open:return
   self->savefd = 0;
 }
 
+/* closing a file we know about */
+
+pid$target::close:entry
+/self->fd[arg0] != 0/
+{
+  self->fd[arg0] = 0;
+}
+
 /* mmap-ing a library we know about */
 
 pid$target::mmap:entry
