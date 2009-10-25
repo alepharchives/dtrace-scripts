@@ -5,74 +5,80 @@
 
 BEGIN
 {
-  depth = 0;
+  d = 0; /* depth */
 }
 
 pid$target::dlopen:entry
 /arg0/
 {
-  self->path[depth] = copyinstr(arg0);
-  self->spec[depth] = speculation();
-  depth++;
-  speculate(self->spec[depth]);
+  printf("opening %s\n", copyinstr(arg0));
+}
+
+pid$target::dlopen:entry
+/arg0/
+{
+  self->path[d] = copyinstr(arg0);
+  self->spec[d] = speculation();
+  d++;
+  speculate(self->spec[d]);
 
   printf("\n\n");
-  printf("dlopen(\"%s\", ...)\n", self->path[depth]);
+  printf("dlopen(\"%s\", ...)\n", self->path[d]);
 }
 
 pid$target::open:entry
-/self->spec[depth] && self->path[depth] != 0 && self->path[depth] == copyinstr(arg0)/
+/self->spec[d] && self->path[d] != 0 && self->path[d] == copyinstr(arg0)/
 { 
-  speculate(self->spec[depth]);
-  self->savefd[depth] = 1;
+  speculate(self->spec[d]);
+  self->savefd[d] = 1;
 }
 
 pid$target::open:return
-/self->spec[depth] && self->savefd[depth]/
+/self->spec[d] && self->savefd[d]/
 {
-  speculate(self->spec[depth]);
-  self->fd[depth] = arg1;
-  printf("  -> open(\"%s\", ...) = %d\n", self->path[depth], self->fd[depth]);
+  speculate(self->spec[d]);
+  self->fd[d] = arg1;
+  printf("  -> open(\"%s\", ...) = %d\n", self->path[d], self->fd[d]);
 }
 
 pid$target::mmap:entry
-/self->spec[depth] && self->fd[depth] && self->fd[depth] == arg4/
+/self->spec[d] && self->fd[d] && self->fd[d] == arg4/
 {
-  speculate(self->spec[depth]);
-  self->mmap_addr[depth] = arg0;
-  self->mmap_len[depth] = arg1;
-  self->mmap_fd[depth] = arg4;
-  self->mmap_offset[depth] = arg5;
+  speculate(self->spec[d]);
+  self->mmap_addr[d] = arg0;
+  self->mmap_len[d] = arg1;
+  self->mmap_fd[d] = arg4;
+  self->mmap_offset[d] = arg5;
   printf("   -> mmap(%x, %u, ..., ..., %d, %u)\n", 
-    self->mmap_addr[depth], self->mmap_len[depth], 
-    self->mmap_fd[depth], self->mmap_offset[depth]);
+    self->mmap_addr[d], self->mmap_len[d], 
+    self->mmap_fd[d], self->mmap_offset[d]);
 }
 
 pid$target::dlopen:return
-/self->spec[depth] && self->fd[depth]/
+/self->spec[d] && self->fd[d]/
 {
-  commit(self->spec[depth]);
-  self->spec[depth] = 0;
+  commit(self->spec[d]);
+  self->spec[d] = 0;
 }
 
 pid$target::dlopen:return
-/self->spec[depth]/
+/self->spec[d]/
 {
-  discard(self->spec[depth]);
-  self->spec[depth] = 0;
+  discard(self->spec[d]);
+  self->spec[d] = 0;
 }
 
 pid$target::dlopen:return
 {
-  self->path[depth] = 0;
-  self->savefd[depth] = 0;
-  self->fd[depth] = 0;
+  self->path[d] = 0;
+  self->savefd[d] = 0;
+  self->fd[d] = 0;
 }
 
 pid$target::dlopen:return
-/depth > 0/
+/d > 0/
 {
-  depth--;
+  d--;
 }
 
 
