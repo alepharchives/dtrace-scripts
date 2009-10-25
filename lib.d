@@ -8,6 +8,25 @@ pid$target::dlopen:entry
 pid$target::dlopen:return
 /self->path != ""/
 {
+  printf("dlopen(%s, ...)\n", copyinstr(self->ppath));
+  self->path = "";
+}
+
+pid$target::dyld??loadPhase5*:entry
+{
+  self->path = copyinstr(arg0);
+}
+
+pid$target::dyld??loadPhase5*:entry
+/self->path != 0/
+{
+  self->func = probefunc;
+}
+
+pid$target::dyld??loadPhase5*:return
+/self->func != 0 && self->func == probefunc/
+{
+  self->func = 0;
   self->path = "";
 }
 
