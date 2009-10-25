@@ -1,13 +1,22 @@
 pid$target::dlopen:entry
 /arg0/
 {
-  self->path = copyinstr(arg0);
+  self->ppath = arg0;
+  self->path = "";
 }
 
 pid$target::dlopen:return
-/self->path != 0/
+/self->path != ""/
 {
-  self->path = 0;
+  self->path = "";
+}
+
+/* file name memory should be wired in by now */
+
+pid$target::open:entry
+/self->ppath && self->path == ""/
+{
+  self->path = copyinstr(self->ppath);
 }
 
 /* opening the same file */
