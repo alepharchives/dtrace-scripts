@@ -26,4 +26,4 @@ proc:::exec-success
 }
 '
 
-sync && purge && dtrace $opts -n "$dtrace"
+sync && purge > /dev/null 2>&1 && dtrace $opts -n "$dtrace"
