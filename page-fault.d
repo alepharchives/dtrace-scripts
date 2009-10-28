@@ -60,12 +60,11 @@ fbt::vn_open_auth:return
   printf("Got a match on %s\n", self->path);
   this->vp = (vnode_t)((nameidata_t)this->ndp)->ni_vp;
   this->lib = stringof((this->vp)->v_name);
-  self->vnode[this->vp] = this->lib;
-  self->fullpath[this->vp] = self->path;
+  self->lib[this->lib] = self->path;
 }
 
 fbt::vnode_pagein:entry
-/self->vnode[(vnode_t)arg0] != 0/
+/self->lib[stringof(((vnode_t)arg0)->v_name)] != 0/
 {
   printf("vnode_pagein(vnode ptr: %x = %s, upl: %x, upl_offset: %u, f_offset: %u, size: %u, flags: %d, ...)\n", arg0, self->vnode[(vnode_t)arg0], arg1, arg2, arg3, arg4, arg5);
 }
