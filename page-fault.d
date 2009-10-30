@@ -7,8 +7,9 @@ pid$target::dlopen:entry
   self->dylib = 1;
 }
 
-pid$target::dyld??loadPhase5*:entry
-/arg0/
+pid$target::dyld??loadPhase5*:entry,
+pid$target::dyld??loadPhase4*:entry
+/!self->dylib && arg0/
 {
   self->path = copyinstr(arg0);
   self->func = probefunc;
@@ -20,7 +21,8 @@ pid$target::dlopen:return
   self->dylib = 0;
 }
 
-pid$target::dyld??loadPhase5*:return
+pid$target::dyld??loadPhase5*:return,
+pid$target::dyld??loadPhase4*:return
 /self->func != 0 && self->func == probefunc/
 {
   self->dylib = 0;
@@ -57,7 +59,7 @@ fbt::vn_open_auth:return
   self->lib[this->lib] = self->path;
   self->vnode[this->lib] = this->vp; 
   /*
-  printf("match = %s\, lib = %s, vnode: %x\n", 
+  printf("match = %s, lib = %s, vnode: %x\n", 
     self->curpath, this->lib, (long)this->vp);
   */
 }
@@ -69,7 +71,20 @@ fbt::vn_open_auth:return
   self->curpath = 0;
   self->ndp = 0;
   self->func = 0;
+  self->dylib = 0;
 }
+
+/*
+fbt::hfs_vnop_pagein:entry
+{
+  printf("hfs_vnop_pagein\n");
+}
+
+fbt::cluster_pagein:entry
+{
+  printf("cluster pagein\n");
+}
+*/
 
 fbt::vnode_pagein:entry
 {
