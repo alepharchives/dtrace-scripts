@@ -10,7 +10,7 @@ if __name__ == "__main__":
 
 	offsets = []
 	sections = []
-	offset = size = vmaddr = 0
+	offset = size = 0
 	
 	# read in sections
 	
@@ -30,7 +30,9 @@ if __name__ == "__main__":
 			if segment == '__LINKEDIT':
 				offsets.append(segoffs)
 				sections.append((segment, '__symtab', segoffs, segsize))
-							
+				offsets.append(segoffs + segsize)
+				sections.append(sections[-1])
+				
 			continue 
 			
 		# Section __const: 1120204 (addr 0x1300 offset 4864)
@@ -39,25 +41,15 @@ if __name__ == "__main__":
 		
 		if m:
 			section = m.group(1)
-			sz, offs = map(int, m.group(2, 4))
+			size, offset = map(int, m.group(2, 4))
 			addr = int(m.group(3), 16)
 			
 			# Section __bss: 61412 (addr 0x1372d40 offset 0)
 			# Section __common: 29384 (addr 0x1381d40 offset 0)
 
-			if offs == 0:
-				offs = offset + addr - vmaddr
+			if offset == 0:
+				continue
 
-			offs1 = offset + addr - vmaddr 
-			
-			if offs1 != offs:
-				print line
-				print "offset: %d, offset1: %d, offset2: %d" % (offs, offset + size, offset + addr - vmaddr)
-				
-			offset = offs
-			size = sz
-			vmaddr = addr
-			
 			offsets.append(offset)
 			sections.append((segment, section, offset, size))
 			continue
