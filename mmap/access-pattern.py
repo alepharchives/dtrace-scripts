@@ -3,6 +3,20 @@
 import sys, re
 from bisect import bisect
 
+def binary_search(a, x, lo=0, hi=None):
+    if hi is None:
+        hi = len(a)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        midval = a[mid]
+        if midval < x:
+            lo = mid + 1
+        elif midval > x: 
+            hi = mid
+        else:
+            return mid
+    return -1
+
 if __name__ == "__main__":
 
 	segments = open(sys.argv[1])
@@ -11,7 +25,7 @@ if __name__ == "__main__":
 	offsets = []
 	sections = []
 	offset = size = 0
-	
+
 	# read in sections
 	
 	for line in segments:
@@ -56,6 +70,9 @@ if __name__ == "__main__":
 	
 	# read in page-ins
 	
+	print offsets
+	print sections
+	
 	for line in pageins:
 		
 		# vnode_pagein: XUL, offset: 20254720, size: 24576
@@ -64,11 +81,15 @@ if __name__ == "__main__":
 		
 		if m:			
 			start, size = map(int, m.group(1, 2))
-			ix = bisect(offsets, start)
-			if ix >= len(sections):
-				print offsets
-				print line
-				print "start: %d, ix: %d" % (start, ix)
+			#ix = bisect(offsets, start)
+			
+			#if offsets[ix] > start:
+			#	ix -= 1
+
+			ix = binary_search(offsets, start)
+		
+			print "binary_search(offsets, %d) = %d" % (start, ix)
+			
 			sect = sections[ix]
 			pages = size / 4096
 			print "%s, %s = %d pages" % (sect[0], sect[1], pages)
