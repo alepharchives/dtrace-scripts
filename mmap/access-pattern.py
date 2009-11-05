@@ -73,5 +73,5 @@ if __name__ == "__main__":
 			
 			sect = sections[ix]
 			pages = size / 4096
-			print "%s, %s = %d pages" % (sect[0], sect[1], pages)
+			print "%s, %s = %d pages, %d pages in" % (sect[0], sect[1], pages, start // 4096)
 		
