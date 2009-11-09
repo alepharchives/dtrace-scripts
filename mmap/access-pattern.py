@@ -23,7 +23,7 @@ if __name__ == "__main__":
 		if m:
 			segment = m.group(1)
 			segsize, segoffs = map(int, m.group(2, 3))
-			print "segment: %s, size: %d, offset: %d" % (segment, segsize, segoffs)
+			print "segment: %s, size: %d pages, offset: %d pages" % (segment, segsize // 4096, segoffs // 4096)
 			
 			# Segment __LINKEDIT: 19382272 (vmaddr 0x138a000 fileoff 20393984)
 			
@@ -60,10 +60,10 @@ if __name__ == "__main__":
 		
 		# vnode_pagein: XUL, offset: 20254720, size: 24576
 		
-		m = re.search('offset:\s+(\d+),\s+size:\s+(\d+)', line)
+		m = re.search('offset:\s+(\d+),\s+size:\s+(\d+),\s+time:\s+(\d+)', line)
 		
 		if m:			
-			start, size = map(int, m.group(1, 2))
+			start, size, time = map(int, m.group(1, 2, 3))
 			ix = bisect(offsets, start)
 			
 			if offsets[ix] > start:
@@ -73,5 +73,6 @@ if __name__ == "__main__":
 			
 			sect = sections[ix]
 			pages = size / 4096
-			print "%s, %s = %d pages, %d pages in" % (sect[0], sect[1], pages, start // 4096)
+			ms = time / 1000000.0
+			print "%s %s, %d pages in %.5gms, offset %d pages" % (sect[0], sect[1], pages, ms, start // 4096)
 		
