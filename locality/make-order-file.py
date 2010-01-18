@@ -85,8 +85,8 @@ for line in open(logfile):
 
 # dump the rest of the symbols
 
-print '%d symbols ordered' % (n - len(whatsloaded))
+# print '%d symbols ordered' % (n - len(whatsloaded))
 
-for sym in whatsloaded:
-		write_syms(syms, sym, whatsloaded[sym])
+# for sym in whatsloaded:
+# 		write_syms(syms, sym, whatsloaded[sym])
 	
