@@ -2,6 +2,14 @@
 <html>
 <body>
 <script>
+
+/*
+user_pref("capability.principal.codebase.p0.granted", "UniversalPreferencesWrite UniversalXPConnect UniversalPreferencesRead");
+user_pref("capability.principal.codebase.p0.id", "file://");
+*/
+
+netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+
 function canQuitApplication()
 {
   var os = Components.classes["@mozilla.org/observer-service;1"]
